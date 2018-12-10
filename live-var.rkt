@@ -71,4 +71,15 @@
                (Node (Assign 'x 2) 1) (set)
                (Node (Assign 'x 'z) 8) (set)
                (Node (Assign 'z (Mult 'y 'y)) 5) (set 'z)))
+  
+(check-equal? (make-immutable-hash (hash->list (cdr (live-variables-star test-stmt (set 'x 'y 'z)))))
+              (hash
+               (Node (NoOp) 7) (set 'z 'y)
+               (Node (Greater 'y 'x) 6) (set 'y)
+               (Node (Assign 'x 1) 3) (set 'x 'y)
+               (Node (Assign 'y 4) 2) (set 'y)
+               (Node (Assign 'z 'y) 4) (set 'z 'y)
+               (Node (Assign 'x 2) 1) (set)
+               (Node (Assign 'x 'z) 8) (set 'x 'y 'z)
+               (Node (Assign 'z (Mult 'y 'y)) 5) (set 'z 'y)))
   )
