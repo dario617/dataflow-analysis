@@ -12,7 +12,7 @@
 
 (require rackunit)
 
-(define live-variables-analysis
+(define live-variables-analysis (λ ([initialExitSet null])
   (Analysis
    ; direction
    'backward
@@ -21,7 +21,7 @@
    ; entry fact
    (λ (fun cfg entry) (set))
    ; exit fact
-   (λ (fun cfg exit) (set))
+   (λ (fun cfg exit) (if (null? initialExitSet) (set) initialExitSet))
    ; gen
    (λ (cfg n)
      (match n
@@ -38,9 +38,14 @@
        [else (set)]))
    ; meet
    set-union))
+)
+
+(define live-variables-star (λ (stmt initialVars)
+  ((chaotic-iteration (live-variables-analysis initialVars) ) stmt))
+)
 
 (define live-variables
-  (chaotic-iteration live-variables-analysis))
+  (chaotic-iteration (live-variables-analysis) ))
 
 (module+ test
 (define test-stmt

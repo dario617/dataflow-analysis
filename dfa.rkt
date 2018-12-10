@@ -26,7 +26,7 @@
   (define kill (Analysis-kill analysis))
   (define meet (Analysis-meet analysis))
 
-  (lambda (fun)
+  (lambda (fun [initialVars null])
     (define cfg (stmt->cfg fun))
     (define IN (make-hash))
     (define OUT (make-hash))
@@ -36,12 +36,12 @@
         (hash-set! OUT n (init cfg n)))
 
     (when (not (empty? entry-fact))
-      (hash-set! OUT (CFG-entry cfg) (entry-fact fun cfg (CFG-entry cfg))))
+      (hash-set! IN (CFG-entry cfg) (entry-fact fun cfg (CFG-entry cfg))))
     (when (not (empty? exit-fact))
-      (hash-set! IN (CFG-exit cfg) (exit-fact fun cfg (CFG-exit cfg))))
+      (hash-set! OUT (CFG-exit cfg) (exit-fact fun cfg (CFG-exit cfg))))
 
-    (hash-set! OUT (CFG-exit cfg) (set))
-    (hash-set! IN (CFG-entry cfg) (set))
+    (hash-set! IN (CFG-exit cfg) (set))
+    (hash-set! OUT (CFG-entry cfg) (set))
     
     (define (loop IN OUT old-IN old-OUT)
       (for ([n (CFG-nodes cfg)])
