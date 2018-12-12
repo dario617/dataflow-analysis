@@ -18,7 +18,7 @@
                                 (parse-stmt body))]
     [`{noop} (NoOp)]
     [`{,stmts ...} (Seq (map parse-stmt stmts))]
-    [else (error 'parse-stmt "can not parse statement")]))
+    [else (begin (printf "Stmt is ~v\n" s) (error 'parse-stmt "can not parse statement"))]))
 
 ; sexp -> Expr
 (define (parse-expr e)
@@ -37,7 +37,7 @@
                              (parse-expr rhs))]
     [`{== ,lhs ,rhs} (Equal (parse-expr lhs)
                             (parse-expr rhs))]
-    [else (error 'parse-expr "can not parse expression")]))
+    [else (begin (printf "Expr is ~v\n" e) (error 'parse-expr "can not parse expression"))]))
 
 ;;;;;;;;;;;;;;;;;
 

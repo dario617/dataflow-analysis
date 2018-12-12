@@ -12,6 +12,10 @@
 
 (require rackunit)
 
+
+(provide (all-defined-out))
+
+;; Set -> Analysis
 (define live-variables-analysis (λ ([initialExitSet null])
   (Analysis
    ; direction
@@ -40,13 +44,19 @@
    set-union))
 )
 
+;;;;;;;;;;;;;;;;;;;;;;; Functions for testing the method ;;;;;;;;;;;;;;;;;;;;;;;
 (define live-variables-star (λ (stmt initialVars)
   ((chaotic-iteration (live-variables-analysis initialVars) ) stmt))
+)
+
+(define live-variables-star-worklist (λ (stmt initialVars)
+  ((worklist (live-variables-analysis initialVars) ) stmt))
 )
 
 (define live-variables
   (chaotic-iteration (live-variables-analysis) ))
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; TEST ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (module+ test
 (define test-stmt
   (parse-stmt
@@ -82,4 +92,20 @@
                (Node (Assign 'x 2) 1) (set)
                (Node (Assign 'x 'z) 8) (set 'x 'y 'z)
                (Node (Assign 'z (Mult 'y 'y)) 5) (set 'z 'y)))
+
+;;;;;;;;;;;;;;;;;;;;;;; Test with worklist ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  
+(define result-OUT-worklist (cdr (live-variables-star-worklist test-stmt (set 'x 'y 'z))))
+  
+(check-equal? (make-immutable-hash (hash->list result-OUT-worklist))
+              (hash
+               (Node (NoOp) 7) (set 'z 'y)
+               (Node (Greater 'y 'x) 6) (set 'y)
+               (Node (Assign 'x 1) 3) (set 'x 'y)
+               (Node (Assign 'y 4) 2) (set 'y)
+               (Node (Assign 'z 'y) 4) (set 'z 'y)
+               (Node (Assign 'x 2) 1) (set)
+               (Node (Assign 'x 'z) 8) (set 'x 'y 'z)
+               (Node (Assign 'z (Mult 'y 'y)) 5) (set 'z 'y)))
+  
   )

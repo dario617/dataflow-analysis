@@ -44,6 +44,9 @@
 
 (define availble-expr (chaotic-iteration avail-expr-analysis))
 
+;; Auxiliar function for correctness test
+(define availble-expr-worklist (worklist avail-expr-analysis))
+
 (module+ test
   (define test-stmt
   (parse-stmt '{{:= x {+ a b}}
@@ -68,4 +71,22 @@
                (set (Plus 'a 'b))
                (Node (Assign 'y (Mult 'a 'b)) 2)
                (set (Plus 'a 'b))))
+
+;;;;;;;;;;;;;;;;;;;;;;; Test with worklist ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  
+(define result-wl (availble-expr-worklist test-stmt))
+  
+(check-equal? (make-immutable-hash (hash->list (car result-wl)))
+              (hash
+               (Node (Assign 'a (Plus 'a 1)) 3)
+               (set (Plus 'a 'b))
+               (Node (Assign 'x (Plus 'a 'b)) 1)
+               (set)
+               (Node (Assign 'x (Plus 'a 'b)) 4)
+               (set)
+               (Node (Greater 'y (Plus 'a 'b)) 5)
+               (set (Plus 'a 'b))
+               (Node (Assign 'y (Mult 'a 'b)) 2)
+               (set (Plus 'a 'b))))
+  
 )

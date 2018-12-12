@@ -94,7 +94,6 @@
         (cons IN OUT)
         (let ([n (car (unbox WORKLIST))])
           (begin
-            (printf "Did iter ~v \n" (unbox WORKLIST))
             ;; Remove n from worklist
             (set-box! WORKLIST (remove n (unbox WORKLIST)))
             ;; Compute the stuff
