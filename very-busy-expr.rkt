@@ -43,18 +43,16 @@
   (chaotic-iteration very-busy-analysis))
 
 (module+ test
-  (define test-fun
-    (parse-function '{test {}
-                           {var a b x y}
-                           {{if {== a b}
-                                {{:= x {- b a}}
-                                 {:= y {- a b}}}
-                                {{:= y {- b a}}
-                                 {:= a 0}
-                                 {:= x {- a b}}}}
-                            {return 0}}}))
+  (define test-stmt
+    (parse-stmt '{{if {== a b}
+                    {{:= x {- b a}}
+                    {:= y {- a b}}}
+                  {{:= y {- b a}}
+                    {:= a 0}
+                    {:= x {- a b}}}}}
+              ))
 
-  (define result (very-busy-exprs test-fun))
+  (define result (very-busy-exprs test-stmt))
   (define result-IN (car result))
   (define result-OUT (cdr result))
   (check-equal? (make-immutable-hash (hash->list result-IN))
@@ -69,8 +67,6 @@
                  (set (Minus 'b 'a))
                  (Node (Equal 'a 'b) 6)
                  (set (Minus 'b 'a))
-                 (Node (Return 0) 8)
-                 (set)
                  (Node (NoOp) 7)
                  (set)
                  (Node (Assign 'x (Minus 'a 'b)) 5)
@@ -88,8 +84,6 @@
                  (set)
                  (Node (Equal 'a 'b) 6)
                  (set (Minus 'b 'a))
-                 (Node (Return 0) 8)
-                 (set)
                  (Node (NoOp) 7)
                  (set)
                  (Node (Assign 'x (Minus 'a 'b)) 5)
