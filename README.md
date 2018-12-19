@@ -1,3 +1,9 @@
+## Requirements
+
+graphviz
+python3-tk
+
+
 ## Dataflow Analysis
 
 A Racket implementation of traditional dataflow analyses for an imperative language TIP.
