@@ -15,8 +15,8 @@ dot.node('3','x:= y')
 
 dot.edges(['12','23'])
 
-dot.render('testim.png', format='png')
-cv_img = cv2.cvtColor(cv2.imread("testim.png.png"),cv2.COLOR_BGR2RGB)
+dot.render('testim', format='jpg')
+cv_img = cv2.cvtColor(cv2.imread("testim.jpg"),cv2.COLOR_BGR2RGB)
 
 
 height, width, no_channels = cv_img.shape

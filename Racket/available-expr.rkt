@@ -14,6 +14,8 @@
 
 (require rackunit)
 
+(provide (all-defined-out))
+
 (define avail-expr-analysis
   (Analysis
    ; direction

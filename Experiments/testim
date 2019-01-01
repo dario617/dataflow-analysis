@@ -1,0 +1,8 @@
+// a test graph
+digraph {
+	1 [label="x:= 1"]
+	2 [label="y:= x + 2"]
+	3 [label="x:= y"]
+	1 -> 2
+	2 -> 3
+}

@@ -1,3 +1,42 @@
+# UCHILE
+
+To run the dataVisualizer you must have the following requirements met:
+* Install in your LinuxOS or MacOS:
+ * graphviz
+ * python3-tk
+ * python3
+ * racket
+* Create a virtual environement with
+```
+$ python3 -m venv venv
+```
+and then activate it with
+```
+$ source venv/bin/activate
+```
+* Install python modules with
+```
+$ pip install -r requirements
+```
+* Finally run the code
+```
+$ python dataVisualizer.py
+```
+## Use instructions
+To run it you must first connect to Racket (actually just call the script) by pressing Start racket.
+Then Connect to Racket. Write your code and PreProcess it!
+Set the options for your analysis and write initial variables if you need to.
+By pressing Do Analysis racket will receive the instructions and await for you to press on Next Step.
+You can move forward and backwards until its finished.
+When it is done an alert will pop up and you must restart the racket service to do another analysis
+
+## TroubleShooting
+If an error occurs or the app never changes to state: connected maybe the socket has not been closed. To force it do
+```
+$ fuser -k 9876/tcp
+```
+with the port which is 9876 for this app.
+
 ## Requirements
 
 graphviz

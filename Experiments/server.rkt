@@ -1,5 +1,5 @@
 #lang racket
-(require "Racket/parser.rkt")
+(require "../Racket/parser.rkt")
 
 (define the-listener (tcp-listen 9876))
 (define-values (in out) (tcp-accept the-listener))

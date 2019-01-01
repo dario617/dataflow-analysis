@@ -87,21 +87,6 @@
       [else (list)]))
   (flatten (map get-exprs-from-node (CFG-nodes cfg))))
 
-
-(define (cfg->json cfg)
-  (match cfg
-    [(Node b l) (string-append "{ \"value\": \"" (~v b) "\" , \"label\":" (~v l) " }")]
-    [(Edge (Node b1 l1) (Node b2 l2) l) ( string-append "{ \"l1\": " (~v l1) ", \"l2\": " (~v l2) ",\"l\":" (~v l)"}")]
-    [CFG (string-append "{ \"entry\": " (cfg->json (CFG-entry cfg))
-                          ", \"exit\":" (cfg->json (CFG-exit cfg))
-                          ", \"nodes\": ["
-       (foldr (lambda (el acc) (string-append (cfg->json el) (string-append "," acc ))) (cfg->json (car (CFG-nodes cfg))) (cdr (CFG-nodes cfg))) "]
-                           , \"edges\": ["
-       (foldr (lambda (el acc) (string-append (cfg->json el) (string-append "," acc ))) (cfg->json (car (CFG-edges cfg))) (cdr (CFG-edges cfg)))
-       "]}")]
-      )
-  )
-
 (module+ test
   (check-match (stmt->cfg (parse-stmt '{:= a 3}))
                 (CFG (Node (Assign 'a 3) _)
